@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Grid,
   TextField,
@@ -6,15 +6,32 @@ import {
   MenuItem,
   FormControl,
   Fab,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import ScenarioForm from './ScenarioForm';
-import './AddForm.css';
+  Typography,
+} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/Add";
+import ScenarioForm from "./ScenarioForm";
+import "./AddForm.css";
 
 const AddForm = () => {
-  const [ticketType, setTicketType] = useState('');
-  const [industry, setIndustry] = useState('');
+  const [ticketType, setTicketType] = useState("");
+  const [industry, setIndustry] = useState("");
   const submitHandler = () => {};
+
+  const [scenarios, setScenarios] = useState([
+    {
+      id: "",
+    },
+  ]);
+  const addScenarios = () => {
+    setScenarios((s) => {
+      return [
+        ...s,
+        {
+          id: "",
+        },
+      ];
+    });
+  };
 
   return (
     <Grid container spacing={2}>
@@ -43,8 +60,15 @@ const AddForm = () => {
         </FormControl>
       </Grid>
       <Grid item xs={12}>
-        <ScenarioForm />
+        <Typography variant="h4" component="div">
+          Scenarios
+        </Typography>
+        {scenarios.map((item, index) => {
+          return <ScenarioForm />;
+        })}
       </Grid>
+      <AddCircleIcon onClick={addScenarios} />
+
       {/* <Grid item xs={12}>
         
       </Grid> */}
