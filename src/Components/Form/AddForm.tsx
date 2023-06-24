@@ -1,14 +1,16 @@
-import React, { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Grid, Typography, Fab, SelectChangeEvent } from '@mui/material';
-import type { Scenario } from '../../model/StoryRequestBody';
-import AddIcon from '@mui/icons-material/Add';
-import ScenarioForm from './ScenarioForm';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { scenarioActions } from '../../store';
+import AddIcon from '@mui/icons-material/Add';
+
+import ScenarioForm from './ScenarioForm';
+import { State, scenarioActions } from '../../store';
 import { TicketType, RoleType } from '../../model/StoryRequestBody';
 import TicketTypeSelect from './TicketTypeSelect';
 import IndustryForm from './IndustryForm';
 import RoleTypeSelect from './RoleTypeSelect';
+import { StatementType } from '../../model/Statement';
 
 type AddFormProps = {
   toggleButton: Function;
@@ -16,24 +18,41 @@ type AddFormProps = {
 
 const AddForm = ({ toggleButton }: AddFormProps) => {
   const dispatch = useDispatch();
-  const scenarios = useSelector((state: any) => state.scenarios);
+  const scenarios = useSelector((state: State) => state.scenarios);
 
   const addScenario = () => {
-    dispatch(scenarioActions.addScenario({} as Scenario));
+    dispatch(scenarioActions.addScenario({
+      statements: [],
+      detail: '',
+    }));
   };
 
   const removeScenario = (id: number) => {
     dispatch(scenarioActions.removeScenario(id));
   };
 
-  const [ticketType, setTicketType] = useState<TicketType>(
-    TicketType.UserStory
-  );
+  const [ticketType, setTicketType] = useState(TicketType.UserStory);
   const [industry, setIndustry] = useState('');
-  const [roleType, setRoleType] = useState<RoleType>(RoleType.BA);
+  const [roleType, setRoleType] = useState(RoleType.BA);
 
   const submitHandler = () => {
-    toggleButton();
+    axios.post('http://localhost:3001/create/story', {
+      ticketType,
+      industry,
+      role: roleType,
+      scenarios: scenarios.map(scenario => {
+        const given = scenario.statements.filter(statement => statement.type === StatementType.Given)
+        const when = scenario.statements.filter(statement => statement.type === StatementType.When)
+        const then = scenario.statements.filter(statement => statement.type === StatementType.Then)
+        return {
+          scenario: scenario.detail,
+          given: given.map(g => g.detail),
+          when: when.map(g => g.detail),
+          then: then.map(g => g.detail)
+        };
+      })
+    }).then(d => console.log(d));
+    // toggleButton();
   };
 
   const handleTicketTypeChange = (event: SelectChangeEvent<TicketType>) => {

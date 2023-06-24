@@ -1,19 +1,23 @@
 import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit';
-import { Scenario } from '../model/StoryRequestBody';
 import { v4 } from 'uuid';
+import { StatementType } from '../model/Statement';
 
-interface StateScenario {
+interface Statement {
   id: string;
-  statements: any;
+  detail: string;
+  type: StatementType
 }
-
-interface StateStatement {
+export interface StateScenario {
   id: string;
-  type: string;
+  detail: string;
+  statements: Statement[];
+}
+interface AddScenarioPayload {
+  statements: Statement[];
   detail: string;
 }
 
-interface State {
+export interface State {
   scenarios: StateScenario[];
 }
 
@@ -23,17 +27,31 @@ const scenarioListSlice = createSlice({
   name: 'scenarioList',
   initialState,
   reducers: {
-    addScenario(state, action: PayloadAction<Scenario>): State {
+    addScenario(state, action: PayloadAction<AddScenarioPayload>): State {
       return {
         ...state,
         scenarios: [
           ...state.scenarios,
           {
             id: v4(),
-            statements: action.payload,
+            detail: action.payload.detail,
+            statements: action.payload.statements,
           },
         ],
       };
+    },
+    updateScenarioDetail(state, action: PayloadAction<{ id:string, detail: string}>): State {
+      const index = state.scenarios.findIndex(s => s.id === action.payload.id);
+      if (index >= 0) {
+        state.scenarios[index].detail = action.payload.detail;
+      }
+      return state;
+    },
+    addStatements(state, action: PayloadAction<StateScenario>): State {
+      const scenarioIndex = state.scenarios.findIndex(s => s.id === action.payload.id);
+      if (scenarioIndex === -1) return state;
+      state.scenarios[scenarioIndex].statements = action.payload.statements;
+      return state;
     },
     removeScenario(state, action) {
       const index = state.scenarios.findIndex(
@@ -44,30 +62,6 @@ const scenarioListSlice = createSlice({
   },
 });
 
-const statementListSlice = createSlice({
-  name: 'statementList',
-  initialState,
-  reducers: {
-    addStatement(state, action: PayloadAction<Scenario>): State {
-      return {
-        ...state,
-        scenarios: [
-          ...state.scenarios,
-          {
-            id: v4(),
-            statements: action.payload,
-          },
-        ],
-      };
-    },
-    removeScenario(state, action) {
-      const index = state.scenarios.findIndex(
-        (task) => task.id === action.payload
-      );
-      state.scenarios.splice(index, 1);
-    },
-  },
-});
 
 const store = configureStore({
   reducer: scenarioListSlice.reducer,

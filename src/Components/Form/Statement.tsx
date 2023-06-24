@@ -1,4 +1,3 @@
-import React, { ChangeEvent, useState } from 'react';
 import {
   Grid,
   FormControl,
@@ -8,19 +7,13 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import './Statement.css';
+import { StatementType, type IStatement } from '../../model/Statement';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-
-const Statement = () => {
-  const [selectedType, setSelectedType] = useState('Given');
-  const [detail, setDetail] = useState('');
-
-  const hanldleTypeChange = (event: SelectChangeEvent<string>) => {
-    setSelectedType(event.target.value);
-  };
-  const hanldleDetailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDetail(event.target.value);
-  };
-
+interface Props {
+  statement: IStatement;
+  onStatementChange: (...args: any) => void;
+}
+const Statement = ({ statement, onStatementChange }: Props) => {
   return (
     <div className="wrapper">
       <Grid container spacing={2}>
@@ -29,13 +22,14 @@ const Statement = () => {
             <Select
               labelId="scenario-type"
               id="scenario-type"
-              value={selectedType}
-              onChange={hanldleTypeChange}
+              value={statement.type}
+              onChange={(e: SelectChangeEvent<StatementType>) => {
+                onStatementChange({ ...statement, type: e.target.value })
+              }}
             >
-              <MenuItem value={'Given'}>Given</MenuItem>
-              <MenuItem value={'When'}>When</MenuItem>
-              <MenuItem value={'Then'}>Then</MenuItem>
-              <MenuItem value={'And'}>And</MenuItem>
+              <MenuItem value={StatementType.Given}>Given</MenuItem>
+              <MenuItem value={StatementType.When}>When</MenuItem>
+              <MenuItem value={StatementType.Then}>Then</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -44,8 +38,10 @@ const Statement = () => {
             <TextField
               id="standard-basic"
               label="detail"
-              onChange={hanldleDetailChange}
-              value={detail}
+              onChange={(e) => { 
+                onStatementChange({ ...statement, detail: e.target.value  })
+              }}
+              value={statement.detail}
             />
           </FormControl>
         </Grid>
