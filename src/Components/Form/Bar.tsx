@@ -13,7 +13,7 @@ const pages = ['Create', 'Result'];
 const Bar = () => {
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="md">
         <Toolbar disableGutters>
           <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography

@@ -1,14 +1,22 @@
-import React, { useState } from "react";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { Card, Grid, Typography } from "@mui/material";
-import "./ScenarioForm.css";
-import Statement from "./Statement";
+import React, { useState } from 'react';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Card, Grid, Typography, Fab } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import './ScenarioForm.css';
+import Statement from './Statement';
 
-const ScenarioForm = () => {
+type ScenarioProps = {
+  key: number;
+  id: string;
+  index: number;
+  removeScenario: Function;
+};
+
+const ScenarioForm = ({ key, index, removeScenario }: ScenarioProps) => {
   const [statements, setStatements] = useState([
     {
-      type: "",
-      detail: "",
+      type: '',
+      detail: '',
     },
   ]);
   const addStatement = () => {
@@ -16,8 +24,8 @@ const ScenarioForm = () => {
       return [
         ...s,
         {
-          type: "",
-          detail: "",
+          type: '',
+          detail: '',
         },
       ];
     });
@@ -26,9 +34,26 @@ const ScenarioForm = () => {
   return (
     <div>
       <Card sx={{ maxWidth: 1000 }} className="wrapper">
-        <Typography variant="h6" component="div">
-          Scenario-id
-        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={8}>
+            <Typography variant="h6" component="div">
+              Scenario-{index + 1}
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <div style={{ textAlign: 'right' }}>
+              <Fab
+                size="small"
+                color="secondary"
+                aria-label="close"
+                onClick={() => removeScenario()}
+              >
+                <CloseIcon />
+              </Fab>
+            </div>
+          </Grid>
+        </Grid>
+
         {statements.map(() => {
           return <Statement />;
         })}
