@@ -13,18 +13,21 @@ import RoleTypeSelect from './RoleTypeSelect';
 import { StatementType } from '../../model/Statement';
 
 type AddFormProps = {
+  setResult: Function;
   toggleButton: Function;
 };
 
-const AddForm = ({ toggleButton }: AddFormProps) => {
+const AddForm = ({ setResult, toggleButton }: AddFormProps) => {
   const dispatch = useDispatch();
   const scenarios = useSelector((state: State) => state.scenarios);
 
   const addScenario = () => {
-    dispatch(scenarioActions.addScenario({
-      statements: [],
-      detail: '',
-    }));
+    dispatch(
+      scenarioActions.addScenario({
+        statements: [],
+        detail: '',
+      })
+    );
   };
 
   const removeScenario = (id: number) => {
@@ -36,23 +39,31 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
   const [roleType, setRoleType] = useState(RoleType.BA);
 
   const submitHandler = () => {
-    axios.post('http://localhost:3001/create/story', {
-      ticketType,
-      industry,
-      role: roleType,
-      scenarios: scenarios.map(scenario => {
-        const given = scenario.statements.filter(statement => statement.type === StatementType.Given)
-        const when = scenario.statements.filter(statement => statement.type === StatementType.When)
-        const then = scenario.statements.filter(statement => statement.type === StatementType.Then)
-        return {
-          scenario: scenario.detail,
-          given: given.map(g => g.detail),
-          when: when.map(g => g.detail),
-          then: then.map(g => g.detail)
-        };
+    axios
+      .post('http://localhost:3001/create/story', {
+        ticketType,
+        industry,
+        role: roleType,
+        scenarios: scenarios.map((scenario) => {
+          const given = scenario.statements.filter(
+            (statement) => statement.type === StatementType.Given
+          );
+          const when = scenario.statements.filter(
+            (statement) => statement.type === StatementType.When
+          );
+          const then = scenario.statements.filter(
+            (statement) => statement.type === StatementType.Then
+          );
+          return {
+            scenario: scenario.detail,
+            given: given.map((g) => g.detail),
+            when: when.map((g) => g.detail),
+            then: then.map((g) => g.detail),
+          };
+        }),
       })
-    }).then(d => console.log(d));
-    // toggleButton();
+      .then((d) => setResult(d.data));
+    toggleButton();
   };
 
   const handleTicketTypeChange = (event: SelectChangeEvent<TicketType>) => {

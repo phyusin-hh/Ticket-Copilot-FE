@@ -32,7 +32,6 @@ const Result = ({ scenarioResults, toggleButton }: ResultProps) => {
           Back To Test
         </Fab>
       </div>
-      ;
     </div>
   );
 };
