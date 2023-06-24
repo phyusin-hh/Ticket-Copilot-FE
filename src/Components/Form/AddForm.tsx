@@ -30,8 +30,10 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
     dispatch(scenarioActions.removeScenario(id));
   };
 
-  const [ticketType, setTicketType] = useState('');
+  const [ticketType, setTicketType] = useState('UserStory');
   const [industry, setIndustry] = useState('');
+  const [roleType, setRoleType] = useState('BA');
+
   const submitHandler = () => {
     toggleButton();
   };
@@ -41,6 +43,10 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
   };
   const hanldleIndustryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIndustry(event.target.value);
+  };
+
+  const hanldleRoleTypeChange = (event: SelectChangeEvent<string>) => {
+    setRoleType(event.target.value);
   };
 
   return (
@@ -57,11 +63,13 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
               value={ticketType}
               onChange={hanldleTicketTypeChange}
             >
+              <MenuItem value="UserStory">User Story</MenuItem>
               <MenuItem value="Bug">Bug</MenuItem>
               <MenuItem value="Task">Task</MenuItem>
             </Select>
           </FormControl>
         </Grid>
+
         <Grid item xs={4}>
           <label>Industry</label>
         </Grid>
@@ -75,6 +83,25 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
             />
           </FormControl>
         </Grid>
+
+        <Grid item xs={4}>
+          <label>Role Type</label>
+        </Grid>
+        <Grid item xs={8}>
+          <FormControl fullWidth>
+            <Select
+              labelId="role-type"
+              id="role-type"
+              value={roleType}
+              onChange={hanldleRoleTypeChange}
+            >
+              <MenuItem value="BA">BA</MenuItem>
+              <MenuItem value="QA">QA</MenuItem>
+              <MenuItem value="Dev">Dev</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
         <Grid item xs={12}>
           <Typography variant="h4" component="div">
             Scenarios

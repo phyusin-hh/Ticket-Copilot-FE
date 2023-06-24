@@ -3,6 +3,7 @@ import { Container, Box, Fab } from '@mui/material';
 import AddForm from './Components/Form/AddForm';
 import Result from './Components/Form/Result';
 import Bar from './Components/Form/Bar';
+import './App.css';
 
 function App() {
   const sampleResults = [
