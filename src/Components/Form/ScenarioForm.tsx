@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Card, Grid, Typography, Fab } from '@mui/material';
+import {
+  Card,
+  Grid,
+  Typography,
+  Fab,
+  FormControl,
+  TextField,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import './ScenarioForm.css';
 import Statement from './Statement';
@@ -13,6 +20,8 @@ type ScenarioProps = {
 };
 
 const ScenarioForm = ({ key, index, removeScenario }: ScenarioProps) => {
+  const [detail, setDetail] = useState('');
+
   const [statements, setStatements] = useState([
     {
       type: '',
@@ -30,17 +39,30 @@ const ScenarioForm = ({ key, index, removeScenario }: ScenarioProps) => {
       ];
     });
   };
+  const hanldleDetailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDetail(event.target.value);
+  };
 
   return (
     <div>
       <Card sx={{ maxWidth: 1000 }} className="wrapper">
         <Grid container spacing={2}>
-          <Grid item xs={8}>
+          <Grid item xs={3}>
             <Typography variant="h6" component="div">
               Scenario-{index + 1}
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={8}>
+            <FormControl fullWidth>
+              <TextField
+                id="standard-basic"
+                label="scenario detail"
+                onChange={hanldleDetailChange}
+                value={detail}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={1}>
             <div style={{ textAlign: 'right' }}>
               <Fab
                 size="small"

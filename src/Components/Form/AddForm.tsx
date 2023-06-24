@@ -1,18 +1,14 @@
 import React, { useState, ChangeEvent } from 'react';
-import {
-  Grid,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  Typography,
-  Fab,
-  SelectChangeEvent,
-} from '@mui/material';
+import { Grid, Typography, Fab, SelectChangeEvent } from '@mui/material';
+import type { Scenario } from '../../model/StoryRequestBody';
 import AddIcon from '@mui/icons-material/Add';
 import ScenarioForm from './ScenarioForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { scenarioActions } from '../../store';
+import { TicketType, RoleType } from '../../model/StoryRequestBody';
+import TicketTypeSelect from './TicketTypeSelect';
+import IndustryForm from './IndustryForm';
+import RoleTypeSelect from './RoleTypeSelect';
 
 type AddFormProps = {
   toggleButton: Function;
@@ -23,30 +19,32 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
   const scenarios = useSelector((state: any) => state.scenarios);
 
   const addScenario = () => {
-    dispatch(scenarioActions.addScenario([{}]));
+    dispatch(scenarioActions.addScenario({} as Scenario));
   };
 
   const removeScenario = (id: number) => {
     dispatch(scenarioActions.removeScenario(id));
   };
 
-  const [ticketType, setTicketType] = useState('UserStory');
+  const [ticketType, setTicketType] = useState<TicketType>(
+    TicketType.UserStory
+  );
   const [industry, setIndustry] = useState('');
-  const [roleType, setRoleType] = useState('BA');
+  const [roleType, setRoleType] = useState<RoleType>(RoleType.BA);
 
   const submitHandler = () => {
     toggleButton();
   };
 
-  const hanldleTicketTypeChange = (event: SelectChangeEvent<string>) => {
-    setTicketType(event.target.value);
+  const handleTicketTypeChange = (event: SelectChangeEvent<TicketType>) => {
+    setTicketType(event.target.value as TicketType);
   };
-  const hanldleIndustryChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleIndustryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIndustry(event.target.value);
   };
 
-  const hanldleRoleTypeChange = (event: SelectChangeEvent<string>) => {
-    setRoleType(event.target.value);
+  const hanldleRoleTypeChange = (event: SelectChangeEvent<RoleType>) => {
+    setRoleType(event.target.value as RoleType);
   };
 
   return (
@@ -56,50 +54,30 @@ const AddForm = ({ toggleButton }: AddFormProps) => {
           <label>Ticket Type</label>
         </Grid>
         <Grid item xs={8}>
-          <FormControl fullWidth>
-            <Select
-              labelId="ticket-type"
-              id="ticket-type"
-              value={ticketType}
-              onChange={hanldleTicketTypeChange}
-            >
-              <MenuItem value="UserStory">User Story</MenuItem>
-              <MenuItem value="Bug">Bug</MenuItem>
-              <MenuItem value="Task">Task</MenuItem>
-            </Select>
-          </FormControl>
+          <TicketTypeSelect
+            ticketType={ticketType}
+            onTicketTypeChange={handleTicketTypeChange}
+          />
         </Grid>
 
         <Grid item xs={4}>
           <label>Industry</label>
         </Grid>
         <Grid item xs={8}>
-          <FormControl fullWidth>
-            <TextField
-              id="industry"
-              label="Industry"
-              value={industry}
-              onChange={hanldleIndustryChange}
-            />
-          </FormControl>
+          <IndustryForm
+            industry={industry}
+            onIndustryChange={handleIndustryChange}
+          />
         </Grid>
 
         <Grid item xs={4}>
           <label>Role Type</label>
         </Grid>
         <Grid item xs={8}>
-          <FormControl fullWidth>
-            <Select
-              labelId="role-type"
-              id="role-type"
-              value={roleType}
-              onChange={hanldleRoleTypeChange}
-            >
-              <MenuItem value="BA">BA</MenuItem>
-              <MenuItem value="QA">QA</MenuItem>
-              <MenuItem value="Dev">Dev</MenuItem>
-            </Select>
-          </FormControl>
+          <RoleTypeSelect
+            roleType={roleType}
+            onRoleTypeChange={hanldleRoleTypeChange}
+          />
         </Grid>
 
         <Grid item xs={12}>
