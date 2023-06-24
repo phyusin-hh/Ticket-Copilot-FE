@@ -22,30 +22,9 @@ const scenarioListSlice = createSlice({
   },
 });
 
-// const statementListSlice = createSlice({
-//   name: 'statementList',
-//   initialState,
-//   reducers: {
-//     addstatement(state, action) {
-//       const newstatement = {
-//         id: v4(),
-//         statements: action.payload,
-//       };
-//       state.statements.push(newstatement);
-//     },
-//     removestatement(state, action) {
-//       const index = state.statements.findIndex(
-//         (task) => task.id === action.payload
-//       );
-//       state.statements.splice(index, 1);
-//     },
-//   },
-// });
-
 const store = configureStore({
   reducer: scenarioListSlice.reducer,
 });
 
 export const scenarioActions = scenarioListSlice.actions;
-//export const statementactions = statementListSlice.actions;
 export default store;

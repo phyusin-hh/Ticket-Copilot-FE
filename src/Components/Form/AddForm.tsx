@@ -11,11 +11,14 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ScenarioForm from './ScenarioForm';
-import './AddForm.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { scenarioActions } from '../../store';
 
-const AddForm = () => {
+type AddFormProps = {
+  toggleButton: Function;
+};
+
+const AddForm = ({ toggleButton }: AddFormProps) => {
   const dispatch = useDispatch();
   const scenarios = useSelector((state: any) => state.scenarios);
 
@@ -29,7 +32,9 @@ const AddForm = () => {
 
   const [ticketType, setTicketType] = useState('');
   const [industry, setIndustry] = useState('');
-  const submitHandler = () => {};
+  const submitHandler = () => {
+    toggleButton();
+  };
 
   const hanldleTicketTypeChange = (event: SelectChangeEvent<string>) => {
     setTicketType(event.target.value);
@@ -39,7 +44,7 @@ const AddForm = () => {
   };
 
   return (
-    <div className="add_form_wrapper">
+    <div className="wrapper">
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <label>Ticket Type</label>
@@ -98,7 +103,12 @@ const AddForm = () => {
         </Grid>
         <Grid item xs={12}>
           <div style={{ textAlign: 'center' }}>
-            <Fab color="primary" aria-label="add" variant="extended">
+            <Fab
+              color="primary"
+              aria-label="add"
+              variant="extended"
+              onClick={submitHandler}
+            >
               <AddIcon sx={{ mr: 1 }} />
               Create Ticket
             </Fab>

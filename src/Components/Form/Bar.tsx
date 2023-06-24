@@ -8,8 +8,6 @@ import {
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 
-const pages = ['Create', 'Result'];
-
 const Bar = () => {
   return (
     <AppBar position="static">
@@ -33,16 +31,6 @@ const Bar = () => {
           >
             STAR
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>
